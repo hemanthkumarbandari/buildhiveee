@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" stop-color="#081421"/>
+      <stop offset="100%" stop-color="#1c2836"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="80%" cy="20%" r="45%">
+      <stop offset="0%" stop-color="#c1cedb" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#c1cedb" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <text x="80" y="900" fill="#c1cedb" font-family="system-ui,sans-serif" font-size="28" opacity="0.7">Replace with admin.jpg</text>
+</svg>
