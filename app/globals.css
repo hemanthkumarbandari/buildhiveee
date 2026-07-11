@@ -92,6 +92,11 @@ body::before {
   isolation: isolate;
 }
 
+/* Base dark background utility for solid sections */
+.theme-dark-bg {
+  background-color: var(--bg-start);
+}
+
 .font-display {
   font-family: var(--font-outfit), 'Outfit', sans-serif;
 }

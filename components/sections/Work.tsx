@@ -179,12 +179,12 @@ export default function Work() {
 
         <div className="max-w-7xl mx-auto w-full px-6 flex-1 flex flex-col justify-center min-h-0">
           {/* DESKTOP ORBIT LAYOUT */}
-          <div className="hidden lg:grid grid-cols-2 gap-4 items-center w-full">
+          <div className="hidden lg:grid grid-cols-2 gap-4 items-center w-full min-h-0">
             
             {/* Left: Orbiting Carousel */}
-            <div className="relative flex items-center justify-center w-full min-h-[400px] lg:min-h-[600px] overflow-hidden py-0 mt-4 lg:mt-8">
+            <div className="relative flex items-center justify-center w-full min-h-0 overflow-visible py-0 mt-4 lg:mt-8">
               <div
-                className="relative flex items-center justify-center select-none scale-[0.45] sm:scale-[0.6] lg:scale-[0.8] xl:scale-[0.95] transition-transform duration-300 origin-center"
+                className="relative flex items-center justify-center select-none scale-[0.45] sm:scale-[0.6] lg:scale-[0.65] xl:scale-[0.8] 2xl:scale-[0.95] transition-transform duration-300 origin-center shrink-0"
                 style={{ width: containerSize, height: containerSize }}
               >
                 
