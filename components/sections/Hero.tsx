@@ -50,7 +50,7 @@ export default function Hero() {
       className="relative z-10 min-h-screen flex items-center pt-20 overflow-hidden isolate"
     >
       <SnowEffect />
-      <div className="absolute top-[-20%] left-[-15%] w-[80vw] h-[80vw] rounded-full bg-[var(--primary)]/15 blur-[160px] pointer-events-none -z-10" aria-hidden="true" />
+      <div className="absolute top-[-20%] left-[-15%] w-[150%] max-w-[800px] aspect-square rounded-full bg-[var(--primary)]/15 blur-[160px] pointer-events-none -z-10" aria-hidden="true" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
         <div className="grid grid-cols-1 md:grid-cols-[55fr_45fr] gap-12 md:gap-8 items-center">

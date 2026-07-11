@@ -54,22 +54,7 @@ const errorVariant = {
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768)
-    checkMobile()
-    let debounceTimer: ReturnType<typeof setTimeout>
-    const debouncedCheck = () => {
-      clearTimeout(debounceTimer)
-      debounceTimer = setTimeout(checkMobile, 150)
-    }
-    window.addEventListener('resize', debouncedCheck, { passive: true })
-    return () => {
-      clearTimeout(debounceTimer)
-      window.removeEventListener('resize', debouncedCheck)
-    }
-  }, [])
+  // Removing isMobile JS state to prevent hydration errors and layout flash
 
   const {
     register,
@@ -95,20 +80,11 @@ export default function Contact() {
 
   return (
     <section id="contact" className="relative z-10 border-t border-[var(--border)]">
-      <div 
-        className="w-full"
-        style={{ 
-          display: 'grid', 
-          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', 
-          gap: 0, 
-          minHeight: '100vh', 
-          alignItems: 'center' 
-        }}
-      >
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-screen items-center max-w-[100vw] overflow-hidden">
         {/* Left column — Lanyard */}
-        <div style={{ height: isMobile ? '50vh' : '100vh', position: 'relative' }}>
+        <div className="h-[50vh] lg:h-screen w-full relative overflow-hidden flex items-center justify-center">
           <Lanyard
-            position={isMobile ? [0, 0, 26] : [0, 0, 22]}
+            position={[0, 0, 24]}
             gravity={[0, -40, 0]}
             frontImage="/buildhive-card.png?v=2"
             imageFit="cover"
@@ -117,14 +93,7 @@ export default function Contact() {
         </div>
 
         {/* Right column — Contact form */}
-        <div 
-          style={{ 
-            padding: isMobile ? '40px 24px' : '80px 60px',
-            display: 'flex', 
-            flexDirection: 'column', 
-            gap: '32px'
-          }}
-        >
+        <div className="px-6 py-10 lg:px-[60px] lg:py-[80px] flex flex-col gap-8 w-full">
           <div>
             <p className="font-body text-[var(--primary)] text-sm font-semibold tracking-widest uppercase mb-3">
               CONTACT

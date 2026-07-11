@@ -150,7 +150,7 @@ export default function Edge() {
       </div>
 
       {/* ── Brand Marquee ────────────────────── */}
-      <div className="border-t border-white/10 pt-12 pb-12 relative w-full">
+      <div className="border-t border-white/10 pt-12 pb-12 relative w-full max-w-[100vw] overflow-hidden">
         <div className="trusted-wave-layer" aria-hidden="true">
             <svg className="trusted-wave-1" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M0,30 C180,55 360,5 540,30 C720,55 900,5 1080,30 C1260,55 1440,5 1440,30 L1440,60 L0,60 Z" fill="#0d1e30" fillOpacity="0.55" />

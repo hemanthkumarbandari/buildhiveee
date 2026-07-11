@@ -28,6 +28,7 @@ export default function Work() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [scrollProgress, setScrollProgress] = useState(0)
   const [showRays, setShowRays] = useState(false)
+  const [isDesktop, setIsDesktop] = useState(true)
 
   const sectionRef = useRef<HTMLElement>(null)
   const stickyRef = useRef<HTMLDivElement>(null)
@@ -75,7 +76,15 @@ export default function Work() {
   useEffect(() => {
     const section = sectionRef.current
     const sticky = stickyRef.current
-    if (!section || !sticky) return
+    const isDesk = window.innerWidth >= 1024
+    setIsDesktop(isDesk)
+    
+    const handleResize = () => setIsDesktop(window.innerWidth >= 1024)
+    window.addEventListener('resize', handleResize)
+    
+    if (!section || !sticky || !isDesk) {
+      return () => window.removeEventListener('resize', handleResize)
+    }
 
     const trigger = ScrollTrigger.create({
       trigger: section,
@@ -94,6 +103,7 @@ export default function Work() {
 
     return () => {
       trigger.kill()
+      window.removeEventListener('resize', handleResize)
     }
   }, [TOTAL])
 
@@ -122,12 +132,12 @@ export default function Work() {
       id="work" 
       ref={sectionRef}
       className="relative z-10 w-full theme-dark-bg"
-      style={{ height: `calc(100dvh + ${(TOTAL - 1) * CARD_STEP}px)` }}
+      style={{ height: isDesktop ? `calc(100dvh + ${(TOTAL - 1) * CARD_STEP}px)` : 'auto' }}
     >
       <div 
         ref={stickyRef}
         className="relative w-full flex flex-col overflow-hidden pt-16 lg:pt-20 pb-10"
-        style={{ height: '100dvh' }}
+        style={{ height: isDesktop ? '100dvh' : 'auto' }}
       >
         {/* Background glow ambient */}
         <div className="absolute top-[20%] right-[-10%] w-[60vw] h-[60vw] rounded-full bg-[var(--primary)]/5 blur-[120px] pointer-events-none -z-10" aria-hidden="true" />
@@ -167,7 +177,8 @@ export default function Work() {
         </div>
 
         <div className="max-w-7xl mx-auto w-full px-6 flex-1 flex flex-col justify-center min-h-0">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-4 items-center w-full">
+          {/* DESKTOP ORBIT LAYOUT */}
+          <div className="hidden lg:grid grid-cols-2 gap-4 items-center w-full">
             
             {/* Left: Orbiting Carousel */}
             <div className="relative flex items-center justify-center w-full min-h-[400px] lg:min-h-[600px] overflow-hidden py-0 mt-4 lg:mt-8">
@@ -420,8 +431,44 @@ export default function Work() {
 
           </div>
 
-          {/* Dot Indicators */}
-          <div className="flex items-center justify-center space-x-3 mt-8 mb-4">
+          {/* MOBILE CAROUSEL LAYOUT */}
+          <div className="flex lg:hidden w-full overflow-x-auto snap-x snap-mandatory gap-4 pb-8 pt-4 -mx-6 px-6 relative z-20" style={{ scrollbarWidth: 'none' }}>
+            {projects.map((p, i) => (
+              <div key={p.id} className="snap-center shrink-0 w-[85vw] max-w-[340px] bg-[#08121f]/80 backdrop-blur-2xl border border-white/5 rounded-3xl p-6 shadow-glass relative flex flex-col">
+                <div className="w-full aspect-[16/10] rounded-xl overflow-hidden mb-5 border border-white/10">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={previewScreenshotUrl(p.url)}
+                    alt={p.title}
+                    onError={safeImage}
+                    loading="lazy"
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
+                <h3 className="text-2xl font-display font-bold text-white tracking-tight mb-2">
+                  {p.title}
+                </h3>
+                <div className="flex items-center text-xs text-[#8da6ff] mb-4 font-medium">
+                  <Briefcase size={14} className="mr-1.5" />
+                  <span>{p.category}</span>
+                </div>
+                <p className="text-sm text-white/60 leading-relaxed mb-6 flex-1">
+                  {p.description}
+                </p>
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3 rounded-xl bg-[#5438ff] hover:bg-[#4b32e6] text-white font-bold text-sm flex items-center justify-center gap-2 transition-all"
+                >
+                  View Live <ExternalLink size={16} />
+                </a>
+              </div>
+            ))}
+          </div>
+
+          {/* Dot Indicators (Desktop only) */}
+          <div className="hidden lg:flex items-center justify-center space-x-3 mt-8 mb-4">
             {projects.map((p, idx) => (
               <button
                 key={p.id}

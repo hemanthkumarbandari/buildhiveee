@@ -48,7 +48,7 @@ export default function Nav() {
             height: scrolled ? '56px' : '64px',
           }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="w-full max-w-5xl bg-night/70 backdrop-blur-md border border-white/10 rounded-full shadow-[0_12px_40px_rgba(0,0,0,0.3)] flex items-center justify-between px-6 pointer-events-auto"
+          className="w-full max-w-5xl bg-night/70 backdrop-blur-md border border-white/10 rounded-full shadow-[0_12px_40px_rgba(0,0,0,0.3)] flex items-center justify-between px-4 md:px-6 pointer-events-auto"
         >
           {/* Logo */}
           <a href="/" className="flex items-center gap-2 group magnetic-target">
@@ -99,7 +99,7 @@ export default function Nav() {
                 className="group-hover:scale-[1.8] group-hover:fill-white transition-all duration-300 origin-center"
               />
             </svg>
-            <span className="font-display font-black text-[1.3rem] leading-none select-none">
+            <span className="font-display font-black text-[1.1rem] md:text-[1.3rem] leading-none select-none">
               <span className="text-white">Build</span>
               <span className="text-glacier">Hive</span>
             </span>

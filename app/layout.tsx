@@ -69,7 +69,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${outfit.variable} ${plusJakartaSans.variable}`}>
-      <body className="font-body theme-dark-bg text-white/95 overflow-x-hidden">
+      <body className="font-body theme-dark-bg text-white/95 overflow-x-hidden w-full max-w-[100vw]">
         <Providers>
           {children}
         </Providers>
