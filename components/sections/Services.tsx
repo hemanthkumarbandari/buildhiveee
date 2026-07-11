@@ -35,7 +35,7 @@ export default function Services() {
           pin: true,
           scrub: 1, // Smooth scrub matching scroll
           start: 'top top',
-          end: `+=${totalScrollHeight}`,
+          end: () => `+=${window.innerHeight * 2.5}`,
           invalidateOnRefresh: true,
           anticipatePin: 1,
           refreshPriority: 10,
@@ -81,7 +81,7 @@ export default function Services() {
   }, [lenis])
 
   return (
-    <section id="services" ref={sectionRef} className="relative z-10 border-t border-[var(--border)] overflow-hidden h-screen">
+    <section id="services" ref={sectionRef} className="relative z-10 border-t border-[var(--border)] overflow-hidden h-screen theme-dark-bg">
       <div className="lg:grid lg:grid-cols-[minmax(240px,300px)_1fr] max-w-[1400px] mx-auto h-full">
 
         {/* Sidebar — sticky, only on desktop */}

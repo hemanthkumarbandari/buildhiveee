@@ -89,11 +89,12 @@ export default function Work() {
     const trigger = ScrollTrigger.create({
       trigger: section,
       start: 'top top',
-      end: `+=${(TOTAL - 1) * CARD_STEP}px`,
+      end: () => `+=${(TOTAL - 1) * CARD_STEP}px`,
       pin: sticky,
       pinSpacing: true,
       scrub: 1.5,
       snap: 1 / (TOTAL - 1),
+      invalidateOnRefresh: true,
       onUpdate: (self) => {
         setScrollProgress(self.progress)
         const rawIndex = self.progress * (TOTAL - 1)
