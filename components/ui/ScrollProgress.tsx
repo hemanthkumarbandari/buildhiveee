@@ -1,13 +1,30 @@
 'use client'
 
-import { motion, useScroll, useSpring } from 'framer-motion'
+import { useEffect, useRef } from 'react'
+import { useScrollStore } from '@/store/scroll.store'
 
+/**
+ * ScrollProgress — reads from the existing Zustand scroll store (fed by Lenis)
+ * instead of attaching a second scroll listener via framer-motion's useScroll.
+ * Uses direct DOM style mutation — zero React re-renders on scroll.
+ */
 export default function ScrollProgress() {
-  const { scrollYProgress } = useScroll()
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
+  const barRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    return useScrollStore.subscribe(
+      (s) => s.scrollProgress,
+      (progress) => {
+        if (barRef.current) {
+          barRef.current.style.transform = `scaleX(${progress})`
+        }
+      }
+    )
+  }, [])
 
   return (
-    <motion.div
+    <div
+      ref={barRef}
       style={{
         position: 'fixed',
         top: 0,
@@ -16,9 +33,11 @@ export default function ScrollProgress() {
         height: '1px',
         background: 'linear-gradient(90deg, #7dc9e8, #b8e4f7, #7dc9e8)',
         transformOrigin: '0%',
-        scaleX,
+        transform: 'scaleX(0)',
         zIndex: 9999,
+        pointerEvents: 'none',
       }}
     />
   )
 }
+

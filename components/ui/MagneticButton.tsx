@@ -1,8 +1,8 @@
 'use client'
 
-import { useRef, useCallback } from 'react'
-import { useSpring, animated } from '@react-spring/web'
+import { useRef, useCallback, useEffect } from 'react'
 import { cn } from '@/lib/utils'
+import { gsap } from '@/lib/gsap'
 
 interface MagneticButtonProps {
   children: React.ReactNode
@@ -18,53 +18,49 @@ export default function MagneticButton({
   className,
   strength = 0.35,
   onClick,
-  href,
-  as: Tag = 'div',
 }: MagneticButtonProps) {
-  const ref = useRef<HTMLDivElement>(null)
+  const outerRef = useRef<HTMLDivElement>(null)
+  const innerRef = useRef<HTMLDivElement>(null)
 
-  const [{ x, y }, api] = useSpring(() => ({
-    x: 0,
-    y: 0,
-    config: { mass: 1, tension: 200, friction: 20 },
-  }))
+  useEffect(() => {
+    const outer = outerRef.current
+    const inner = innerRef.current
+    if (!outer || !inner) return
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      const el = ref.current
-      if (!el) return
-      const rect = el.getBoundingClientRect()
-      const cx = rect.left + rect.width / 2
-      const cy = rect.top + rect.height / 2
-      const dx = e.clientX - cx
-      const dy = e.clientY - cy
-      api.start({ x: dx * strength, y: dy * strength })
-    },
-    [api, strength]
-  )
+    const moveX = gsap.quickTo(inner, 'x', { duration: 0.4, ease: 'power3.out' })
+    const moveY = gsap.quickTo(inner, 'y', { duration: 0.4, ease: 'power3.out' })
 
-  const handleMouseLeave = useCallback(() => {
-    api.start({ x: 0, y: 0 })
-  }, [api])
+    const onMove = (e: MouseEvent) => {
+      const rect = outer.getBoundingClientRect()
+      const dx = e.clientX - (rect.left + rect.width / 2)
+      const dy = e.clientY - (rect.top + rect.height / 2)
+      moveX(dx * strength)
+      moveY(dy * strength)
+    }
+    const onLeave = () => {
+      moveX(0)
+      moveY(0)
+    }
+
+    outer.addEventListener('mousemove', onMove)
+    outer.addEventListener('mouseleave', onLeave)
+    return () => {
+      outer.removeEventListener('mousemove', onMove)
+      outer.removeEventListener('mouseleave', onLeave)
+    }
+  }, [strength])
+
+  const handleClick = useCallback(() => onClick?.(), [onClick])
 
   return (
     <div
-      ref={ref}
+      ref={outerRef}
       className={cn('magnetic-target', className)}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
     >
-      <animated.div style={{ x, y }}>
-        {Tag === 'a' ? (
-          <a href={href} onClick={onClick}>
-            {children}
-          </a>
-        ) : Tag === 'button' ? (
-          <button onClick={onClick}>{children}</button>
-        ) : (
-          <div onClick={onClick}>{children}</div>
-        )}
-      </animated.div>
+      <div ref={innerRef}>
+        {children}
+      </div>
     </div>
   )
 }

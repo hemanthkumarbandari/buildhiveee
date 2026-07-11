@@ -106,7 +106,7 @@ export default function Contact() {
         }}
       >
         {/* Left column — Lanyard */}
-        <div style={{ height: isMobile ? '50vh' : '100vh', position: 'relative', cursor: 'none' }}>
+        <div style={{ height: isMobile ? '50vh' : '100vh', position: 'relative' }}>
           <Lanyard
             position={isMobile ? [0, 0, 26] : [0, 0, 22]}
             gravity={[0, -40, 0]}

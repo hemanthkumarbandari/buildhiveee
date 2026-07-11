@@ -19,12 +19,19 @@ export default function Nav() {
   const setScrolled = useUIStore((s) => s.setNavScrolled)
   const mobileOpen = useUIStore((s) => s.mobileNavOpen)
   const setMobileOpen = useUIStore((s) => s.setMobileNav)
-  const scrollY = useScrollStore((s) => s.scrollY)
   const [hoveredLink, setHoveredLink] = useState<string | null>(null)
 
   useEffect(() => {
-    setScrolled(scrollY > 40)
-  }, [scrollY, setScrolled])
+    return useScrollStore.subscribe(
+      (s) => s.scrollY,
+      (y) => {
+        const isScrolled = y > 40
+        if (useUIStore.getState().navScrolled !== isScrolled) {
+          setScrolled(isScrolled)
+        }
+      }
+    )
+  }, [setScrolled])
 
 
   return (
@@ -44,7 +51,7 @@ export default function Nav() {
           className="w-full max-w-5xl bg-night/70 backdrop-blur-md border border-white/10 rounded-full shadow-[0_12px_40px_rgba(0,0,0,0.3)] flex items-center justify-between px-6 pointer-events-auto"
         >
           {/* Logo */}
-          <a href="#" className="flex items-center gap-2 group magnetic-target">
+          <a href="/" className="flex items-center gap-2 group magnetic-target">
             <svg
               width="28"
               height="28"
@@ -94,7 +101,7 @@ export default function Nav() {
             </svg>
             <span className="font-display font-black text-[1.3rem] leading-none select-none">
               <span className="text-white">Build</span>
-              <span className="text-glacier">Hivee</span>
+              <span className="text-glacier">Hive</span>
             </span>
           </a>
 

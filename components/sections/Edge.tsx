@@ -2,7 +2,12 @@
 
 import { motion } from 'framer-motion'
 import Marquee from '@/components/ui/Marquee'
-import ColorBends from '@/components/ui/ColorBends'
+import dynamic from 'next/dynamic'
+
+const ColorBends = dynamic(() => import('@/components/ui/ColorBends'), {
+  ssr: false,
+  loading: () => null,
+})
 
 const cards = [
   {
@@ -64,7 +69,7 @@ export default function Edge() {
   return (
     <section
       id="edge"
-      className="relative z-10 py-20 overflow-hidden"
+      className="relative z-10 py-20 overflow-hidden theme-dark-bg"
     >
       {/* ColorBends ambient — untouched */}
       <div className="absolute inset-0 w-full h-full pointer-events-auto opacity-30 mix-blend-screen">
@@ -142,10 +147,11 @@ export default function Edge() {
             While other studios ship you a site — we ship you a system.
           </p>
         </motion.div>
+      </div>
 
-        {/* ── Brand Marquee ────────────────────── */}
-        <div className="border-t border-white/10 pt-12 pb-12 relative">
-          <div className="trusted-wave-layer" aria-hidden="true">
+      {/* ── Brand Marquee ────────────────────── */}
+      <div className="border-t border-white/10 pt-12 pb-12 relative w-full">
+        <div className="trusted-wave-layer" aria-hidden="true">
             <svg className="trusted-wave-1" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M0,30 C180,55 360,5 540,30 C720,55 900,5 1080,30 C1260,55 1440,5 1440,30 L1440,60 L0,60 Z" fill="#0d1e30" fillOpacity="0.55" />
             </svg>
@@ -178,8 +184,6 @@ export default function Edge() {
               ))}
             </Marquee>
           </div>
-        </div>
-
       </div>
     </section>
   )

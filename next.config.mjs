@@ -1,5 +1,14 @@
 /** @type {import('next').NextConfig} */
 const config = {
+  images: {
+    formats: ['image/avif', 'image/webp'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 's0.wp.com',
+      },
+    ],
+  },
   webpack(config) {
     config.module.rules.push({
       test: /\.(glsl|vert|frag)$/,

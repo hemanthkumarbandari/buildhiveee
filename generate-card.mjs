@@ -69,7 +69,7 @@ const svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http
 
   <!-- Brand name -->
   <text x="300" y="466" font-family="Arial, sans-serif" font-size="46" font-weight="bold"
-        fill="white" text-anchor="middle" letter-spacing="3">BuildHivee</text>
+        fill="white" text-anchor="middle" letter-spacing="3">BuildHive</text>
 
   <!-- Tagline -->
   <text x="300" y="502" font-family="Arial, sans-serif" font-size="15"

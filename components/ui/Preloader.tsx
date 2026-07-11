@@ -3,7 +3,12 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useUIStore } from '@/store/ui.store'
-import MagicRings from '@/components/ui/MagicRings'
+import dynamic from 'next/dynamic'
+
+const MagicRings = dynamic(() => import('@/components/ui/MagicRings'), {
+  ssr: false,
+  loading: () => null,
+})
 
 export default function Preloader() {
   const setPreloader = useUIStore((s) => s.setPreloader)

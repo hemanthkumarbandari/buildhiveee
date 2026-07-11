@@ -1,10 +1,12 @@
 'use client'
 
 import { useEffect, useRef, useState, useCallback } from 'react'
+
 import { serviceCarouselItems } from '@/data/serviceCarousel'
 import { cn } from '@/lib/utils'
 import { gsap, ScrollTrigger } from '@/lib/gsap'
 import { useLenisContext } from '@/components/layout/Providers'
+import Image from 'next/image'
 
 export default function Services() {
   const [active, setActive] = useState(0)
@@ -156,11 +158,11 @@ export default function Services() {
                   key={item.id}
                   className="relative w-full h-full shrink-0"
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={item.image}
                     alt={item.label}
-                    className="absolute inset-0 w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                     draggable={false}
                     loading="lazy"
                     decoding="async"

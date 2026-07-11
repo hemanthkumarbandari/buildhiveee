@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef } from 'react';
+import Image from 'next/image';
 
 const CSS = `
 @keyframes snowmanFloat {
@@ -9,7 +10,6 @@ const CSS = `
 .snowman-img {
   animation: snowmanFloat 4.5s ease-in-out infinite;
   transform-origin: bottom center;
-  will-change: transform;
   width: 100%;
   max-width: 460px;
   height: auto;
@@ -223,16 +223,18 @@ export default function SnowmanHero() {
           }}
         />
 
-        {/* Snowman image */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          ref={imgRef}
-          src="/snowman.png"
-          alt="Snowman"
-          className="snowman-img"
-          draggable={false}
-          style={{ position: 'relative', zIndex: 2 }}
-        />
+        {/* Snowman image — priority because it is the hero LCP element */}
+        <div ref={imgRef} className="snowman-img" style={{ position: 'relative', zIndex: 2, maxWidth: 460, width: '100%' }}>
+          <Image
+            src="/snowman.webp"
+            alt="BuildHive Studio Snowman"
+            width={920}
+            height={1080}
+            priority
+            draggable={false}
+            style={{ width: '100%', height: 'auto', userSelect: 'none', pointerEvents: 'none', display: 'block' }}
+          />
+        </div>
 
         {/* Scarf ripple overlay */}
         <div

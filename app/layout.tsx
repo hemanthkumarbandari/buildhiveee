@@ -18,6 +18,9 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 })
 
 export const metadata: Metadata = {
+  // ⚠️  DOMAIN CHECK: canonical & OG URL are set to https://buildhive.studio
+  // If the domain is not yet live, social sharing previews will 404.
+  // Verify the domain is pointed and SSL is provisioned before shipping to production.
   metadataBase: new URL('https://buildhive.studio'),
   title: 'BuildHive — Premium 3D Web Studio | Digital Products & Brand Experiences',
   description:

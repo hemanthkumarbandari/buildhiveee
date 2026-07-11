@@ -3,7 +3,20 @@
 /* ──────────────────────────────────────────────────────────────
    Footer — 4-column grid: Brand · Studio · Services · Contact
    Bottom bar: copyright + legal links
+
+   ► DROP YOUR REAL SOCIAL URLS INTO THE CONSTANT BELOW ◄
 ────────────────────────────────────────────────────────────── */
+
+/* ── Social profile URLs ────────────────────────────────────────
+   Replace the empty strings with your actual profile links.
+   These are intentionally at the top of the file for easy editing.
+──────────────────────────────────────────────────────────────── */
+const SOCIAL_LINKS = {
+  linkedin: '',   // e.g. https://linkedin.com/company/buildhive
+  twitter:  '',   // e.g. https://twitter.com/buildhive
+  dribbble: '',   // e.g. https://dribbble.com/buildhive
+  github:   '',   // e.g. https://github.com/buildhive
+}
 
 function BrandLogo() {
   return (
@@ -18,7 +31,7 @@ function BrandLogo() {
       </svg>
       <span className="font-display font-black text-[1.3rem] leading-none select-none">
         <span className="text-white">Build</span>
-        <span className="text-glacier">Hivee</span>
+        <span className="text-glacier">Hive</span>
       </span>
     </div>
   )
@@ -58,27 +71,37 @@ function GitHubIcon() {
   )
 }
 
+/* ── Social links built from the constant above ─────────────── */
 const socialLinks = [
-  { label: 'LinkedIn', icon: <LinkedInIcon />, href: 'https://linkedin.com' },
-  { label: 'Twitter / X', icon: <TwitterXIcon />, href: 'https://twitter.com' },
-  { label: 'Dribbble', icon: <DribbbleIcon />, href: 'https://dribbble.com' },
-  { label: 'GitHub', icon: <GitHubIcon />, href: 'https://github.com' },
+  { label: 'LinkedIn',   icon: <LinkedInIcon />,  href: SOCIAL_LINKS.linkedin || 'https://linkedin.com' },
+  { label: 'Twitter / X', icon: <TwitterXIcon />, href: SOCIAL_LINKS.twitter  || 'https://twitter.com'  },
+  { label: 'Dribbble',   icon: <DribbbleIcon />,  href: SOCIAL_LINKS.dribbble || 'https://dribbble.com' },
+  { label: 'GitHub',     icon: <GitHubIcon />,    href: SOCIAL_LINKS.github   || 'https://github.com'   },
 ]
 
+/* ── Studio nav wired to real in-page anchors ───────────────── */
 const studioLinks = [
-  { label: 'About', hiring: false },
-  { label: 'Services', hiring: false },
-  { label: 'Works', hiring: false },
-  { label: 'The Edge', hiring: false },
-  { label: 'Careers', hiring: true },
+  { label: 'About',    href: '/#services', hiring: false },
+  { label: 'Services', href: '/#services', hiring: false },
+  { label: 'Works',    href: '/#work',     hiring: false },
+  { label: 'The Edge', href: '/#edge',     hiring: false },
+  { label: 'Careers',  href: '/#contact',  hiring: true  },
 ]
 
+/* ── Service links — scroll to Services section ─────────────── */
 const serviceLinks = [
-  '3D Websites',
-  'UI/UX Design',
-  'Data Dashboards',
-  'Brand Experiences',
-  'Digital Products',
+  { label: '3D Websites',      href: '/#services' },
+  { label: 'UI/UX Design',     href: '/#services' },
+  { label: 'Data Dashboards',  href: '/#services' },
+  { label: 'Brand Experiences',href: '/#services' },
+  { label: 'Digital Products', href: '/#services' },
+]
+
+/* ── Legal links — real pages ────────────────────────────────── */
+const legalLinks = [
+  { label: 'Privacy Policy', href: '/privacy'  },
+  { label: 'Terms',          href: '/terms'    },
+  { label: 'Sitemap',        href: '/sitemap'  },
 ]
 
 export default function Footer() {
@@ -126,10 +149,10 @@ export default function Footer() {
               style={{ background: 'rgba(255,255,255,0.1)' }}
             />
             <nav className="flex flex-col gap-3">
-              {studioLinks.map(({ label, hiring }) => (
+              {studioLinks.map(({ label, href, hiring }) => (
                 <a
                   key={label}
-                  href="#"
+                  href={href}
                   className="font-body text-sm text-white/60 hover:text-white transition-colors duration-200 flex items-center gap-2"
                 >
                   {label}
@@ -163,10 +186,10 @@ export default function Footer() {
               style={{ background: 'rgba(255,255,255,0.1)' }}
             />
             <nav className="flex flex-col gap-3">
-              {serviceLinks.map((label) => (
+              {serviceLinks.map(({ label, href }) => (
                 <a
                   key={label}
-                  href="#"
+                  href={href}
                   className="font-body text-sm text-white/60 hover:text-white transition-colors duration-200"
                 >
                   {label}
@@ -221,14 +244,14 @@ export default function Footer() {
             © 2026 BuildHive Studio. All rights reserved.
           </p>
           <div className="flex items-center gap-4">
-            {['Privacy Policy', 'Terms', 'Sitemap'].map((link) => (
+            {legalLinks.map(({ label, href }) => (
               <a
-                key={link}
-                href="#"
+                key={label}
+                href={href}
                 className="font-body text-white/40 hover:text-white/70 transition-colors duration-200"
                 style={{ fontSize: '12px' }}
               >
-                {link}
+                {label}
               </a>
             ))}
           </div>
