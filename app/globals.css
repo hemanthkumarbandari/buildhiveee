@@ -46,6 +46,7 @@ html {
   scroll-behavior: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 /* Hide cursor rings on touch-only devices and restore native cursor */

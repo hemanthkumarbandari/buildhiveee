@@ -8,8 +8,8 @@ import MagneticButton from '@/components/ui/MagneticButton'
 import SnowmanHero from '@/components/ui/SnowmanHero'
 import { gsap } from '@/lib/gsap'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
+import { useIsMobile } from '@/hooks/useIsMobile'
 import dynamic from 'next/dynamic'
-import { useState } from 'react'
 
 const containerVariants = {
   hidden: {},
@@ -25,14 +25,7 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
   const headlineRef = useRef<HTMLDivElement>(null)
   const reduced = useReducedMotion()
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     if (reduced) return
@@ -129,7 +122,8 @@ export default function Hero() {
             className="relative h-[420px] md:h-[520px] hidden md:flex items-center justify-center"
           >
             <div className="relative flex items-center justify-center w-full h-full min-h-[500px]">
-              <SnowmanHero />
+              {/* Only render heavy 3D scene on desktop/tablet to save battery and performance */}
+              {!isMobile && <SnowmanHero />}
             </div>
           </motion.div>
         </div>

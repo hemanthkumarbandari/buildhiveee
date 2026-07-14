@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import Marquee from '@/components/ui/Marquee'
 import dynamic from 'next/dynamic'
+import { useIsMobile } from '@/hooks/useIsMobile'
 
 const ColorBends = dynamic(() => import('@/components/ui/ColorBends'), {
   ssr: false,
@@ -66,15 +67,18 @@ function EdgeCard({ card, delay }: { card: typeof cards[0]; delay: number }) {
 }
 
 export default function Edge() {
+  const isMobile = useIsMobile()
+
   return (
     <section
       id="edge"
       className="relative z-10 py-20 overflow-hidden theme-dark-bg"
     >
-      {/* ColorBends ambient — untouched */}
+      {/* ColorBends ambient */}
       <div className="absolute inset-0 w-full h-full pointer-events-auto opacity-30 mix-blend-screen">
-        <ColorBends
-          colors={['#7dc9e8', '#3f9cff', '#0a192f']}
+        {!isMobile ? (
+          <ColorBends
+            colors={['#7dc9e8', '#3f9cff', '#0a192f']}
           rotation={90}
           speed={0.15}
           scale={1.2}
@@ -88,6 +92,9 @@ export default function Edge() {
           bandWidth={4}
           transparent={true}
         />
+        ) : (
+          <div className="w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#3f9cff]/20 via-transparent to-transparent" />
+        )}
       </div>
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">

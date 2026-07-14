@@ -8,6 +8,7 @@ import { z } from 'zod'
 import { CheckCircle } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import MagneticButton from '@/components/ui/MagneticButton'
+import { useIsMobile } from '@/hooks/useIsMobile'
 
 const Aurora = dynamic(() => import('@/components/effects/Aurora'), {
   ssr: false,
@@ -58,15 +59,7 @@ const errorVariant = {
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-  // Removing isMobile JS state for the layout structure, but keeping it for animations
+  const isMobile = useIsMobile()
 
   const {
     register,
@@ -165,7 +158,7 @@ export default function Contact() {
                         background: 'rgba(255,255,255,0.04)',
                         border: '1px solid rgba(255,255,255,0.08)',
                         borderRadius: '2px',
-                        padding: '14px 16px',
+                        padding: '16px 16px',
                         fontSize: '14px',
                         color: '#fff',
                         width: '100%',
@@ -192,7 +185,7 @@ export default function Contact() {
                         background: 'rgba(255,255,255,0.04)',
                         border: '1px solid rgba(255,255,255,0.08)',
                         borderRadius: '2px',
-                        padding: '14px 16px',
+                        padding: '16px 16px',
                         fontSize: '14px',
                         color: '#fff',
                         width: '100%',
@@ -220,7 +213,7 @@ export default function Contact() {
                       background: 'rgba(255,255,255,0.04)',
                       border: '1px solid rgba(255,255,255,0.08)',
                       borderRadius: '2px',
-                      padding: '14px 16px',
+                      padding: '16px 16px',
                       fontSize: '14px',
                       color: '#fff',
                       width: '100%',
@@ -247,7 +240,7 @@ export default function Contact() {
                       background: 'rgba(255,255,255,0.04)',
                       border: '1px solid rgba(255,255,255,0.08)',
                       borderRadius: '2px',
-                      padding: '14px 16px',
+                      padding: '16px 16px',
                       fontSize: '14px',
                       color: '#fff',
                       width: '100%',
