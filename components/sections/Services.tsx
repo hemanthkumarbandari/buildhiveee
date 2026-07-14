@@ -22,43 +22,39 @@ export default function Services() {
     const track = trackRef.current
     if (!section || !track) return
 
-    // Wait a tick for layout to settle
-    const timer = setTimeout(() => {
-      const totalItems = serviceCarouselItems.length
-      const totalScrollHeight = window.innerHeight * 2.5 // Adjust this multiplier to control scroll speed
+    const totalItems = serviceCarouselItems.length
+    const totalScrollHeight = window.innerHeight * 2.5 // Adjust this multiplier to control scroll speed
 
-      const tween = gsap.to(track, {
-        y: `-${(totalItems - 1) * 100}%`,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          pin: true,
-          scrub: 1, // Smooth scrub matching scroll
-          start: 'top top',
-          end: () => `+=${window.innerHeight * 2.5}`,
-          invalidateOnRefresh: true,
-          anticipatePin: 1,
-          refreshPriority: 10,
-          snap: {
-            snapTo: 1 / (totalItems - 1),
-            duration: { min: 0.2, max: 0.5 },
-            delay: 0.1,
-            ease: 'power1.inOut'
-          },
-          onUpdate: (self) => {
-            // Update active index based on progress (0 to 1)
-            const newActive = Math.round(self.progress * (totalItems - 1))
-            setActive(newActive)
-          }
+    const tween = gsap.to(track, {
+      y: `-${(totalItems - 1) * 100}%`,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        pin: true,
+        scrub: 1, // Smooth scrub matching scroll
+        start: 'top top',
+        end: () => `+=${window.innerHeight * 2.5}`,
+        invalidateOnRefresh: true,
+        anticipatePin: 1,
+        refreshPriority: 10,
+        snap: {
+          snapTo: 1 / (totalItems - 1),
+          duration: { min: 0.2, max: 0.5 },
+          delay: 0.1,
+          ease: 'power1.inOut'
         },
-      })
+        onUpdate: (self) => {
+          // Update active index based on progress (0 to 1)
+          const newActive = Math.round(self.progress * (totalItems - 1))
+          setActive(newActive)
+        }
+      },
+    })
 
-      triggerRef.current = tween.scrollTrigger as ScrollTrigger
-      ScrollTrigger.refresh()
-    }, 100)
+    triggerRef.current = tween.scrollTrigger as ScrollTrigger
+    ScrollTrigger.refresh()
 
     return () => {
-      clearTimeout(timer)
       if (triggerRef.current) {
         triggerRef.current.kill()
         triggerRef.current = null

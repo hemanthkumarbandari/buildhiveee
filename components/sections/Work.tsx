@@ -91,7 +91,7 @@ export default function Work() {
       start: 'top top',
       end: () => `+=${(TOTAL - 1) * CARD_STEP}px`,
       pin: sticky,
-      pinSpacing: true,
+      pinSpacing: false,
       scrub: 1.5,
       snap: 1 / (TOTAL - 1),
       invalidateOnRefresh: true,
