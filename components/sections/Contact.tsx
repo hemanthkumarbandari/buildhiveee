@@ -8,6 +8,11 @@ import { z } from 'zod'
 import { CheckCircle } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import MagneticButton from '@/components/ui/MagneticButton'
+import { useIsMobile } from '@/hooks/useIsMobile'
+
+const Aurora = dynamic(() => import('@/components/effects/Aurora'), {
+  ssr: false,
+})
 
 const Lanyard = dynamic(() => import('@/components/ui/Lanyard'), {
   ssr: false,
@@ -54,7 +59,7 @@ const errorVariant = {
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
-  // Removing isMobile JS state to prevent hydration errors and layout flash
+  const isMobile = useIsMobile()
 
   const {
     register,
@@ -79,8 +84,20 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="relative z-10 border-t border-[var(--border)]">
-      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-screen items-center max-w-[100vw] overflow-hidden">
+    <section id="contact" className="relative z-10 border-t border-[var(--border)] isolate bg-[#08121f]">
+      {/* Aurora Ambient Background */}
+      {!isMobile && (
+        <div className="absolute inset-0 z-0 pointer-events-none" style={{ opacity: 0.8, mixBlendMode: 'screen' }}>
+          <Aurora
+            colorStops={["#08121f", "#3B8BD4", "#08121f"]}
+            amplitude={0.6}
+            blend={0.4}
+            speed={0.3}
+          />
+        </div>
+      )}
+
+      <div className="relative z-10 w-full grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-screen items-center max-w-[100vw] overflow-hidden">
         {/* Left column — Lanyard */}
         <div className="h-[50vh] lg:h-screen w-full relative overflow-hidden flex items-center justify-center">
           <Lanyard
@@ -141,7 +158,7 @@ export default function Contact() {
                         background: 'rgba(255,255,255,0.04)',
                         border: '1px solid rgba(255,255,255,0.08)',
                         borderRadius: '2px',
-                        padding: '14px 16px',
+                        padding: '16px 16px',
                         fontSize: '14px',
                         color: '#fff',
                         width: '100%',
@@ -168,7 +185,7 @@ export default function Contact() {
                         background: 'rgba(255,255,255,0.04)',
                         border: '1px solid rgba(255,255,255,0.08)',
                         borderRadius: '2px',
-                        padding: '14px 16px',
+                        padding: '16px 16px',
                         fontSize: '14px',
                         color: '#fff',
                         width: '100%',
@@ -196,7 +213,7 @@ export default function Contact() {
                       background: 'rgba(255,255,255,0.04)',
                       border: '1px solid rgba(255,255,255,0.08)',
                       borderRadius: '2px',
-                      padding: '14px 16px',
+                      padding: '16px 16px',
                       fontSize: '14px',
                       color: '#fff',
                       width: '100%',
@@ -223,7 +240,7 @@ export default function Contact() {
                       background: 'rgba(255,255,255,0.04)',
                       border: '1px solid rgba(255,255,255,0.08)',
                       borderRadius: '2px',
-                      padding: '14px 16px',
+                      padding: '16px 16px',
                       fontSize: '14px',
                       color: '#fff',
                       width: '100%',

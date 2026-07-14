@@ -118,7 +118,7 @@ export default function Aurora(props) {
 
   const ctnDom = useRef(null);
 
-  const isVisible = useRef(false);
+  const isVisible = useRef(true);
 
   useEffect(() => {
     if (ctnDom.current) {

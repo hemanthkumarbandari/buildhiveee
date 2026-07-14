@@ -46,6 +46,7 @@ html {
   scroll-behavior: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 /* Hide cursor rings on touch-only devices and restore native cursor */
@@ -90,6 +91,11 @@ body::before {
 [data-section] {
   contain: layout style;
   isolation: isolate;
+}
+
+/* Base dark background utility for solid sections */
+.theme-dark-bg {
+  background-color: var(--bg-start);
 }
 
 .font-display {

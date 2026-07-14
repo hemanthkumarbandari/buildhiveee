@@ -22,43 +22,55 @@ export default function Services() {
     const track = trackRef.current
     if (!section || !track) return
 
-    const totalItems = serviceCarouselItems.length
-    const totalScrollHeight = window.innerHeight * 2.5 // Adjust this multiplier to control scroll speed
+    const mm = gsap.matchMedia()
 
-    const tween = gsap.to(track, {
-      y: `-${(totalItems - 1) * 100}%`,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section,
-        pin: true,
-        scrub: 1, // Smooth scrub matching scroll
-        start: 'top top',
-        end: () => `+=${window.innerHeight * 2.5}`,
-        invalidateOnRefresh: true,
-        anticipatePin: 1,
-        refreshPriority: 10,
-        snap: {
-          snapTo: 1 / (totalItems - 1),
-          duration: { min: 0.2, max: 0.5 },
-          delay: 0.1,
-          ease: 'power1.inOut'
-        },
-        onUpdate: (self) => {
-          // Update active index based on progress (0 to 1)
-          const newActive = Math.round(self.progress * (totalItems - 1))
-          setActive(newActive)
+    mm.add('(min-width: 1024px)', () => {
+      // Wait a tick for layout to settle
+      const timer = setTimeout(() => {
+        const totalItems = serviceCarouselItems.length
+        const totalScrollHeight = window.innerHeight * 2.5 // Adjust this multiplier to control scroll speed
+
+        const tween = gsap.to(track, {
+          y: `-${(totalItems - 1) * 100}%`,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            pin: true,
+            scrub: 1, // Smooth scrub matching scroll
+            start: 'top top',
+            end: () => `+=${window.innerHeight * 2.5}`,
+            invalidateOnRefresh: true,
+            anticipatePin: 1,
+            refreshPriority: 10,
+            snap: {
+              snapTo: 1 / (totalItems - 1),
+              duration: { min: 0.2, max: 0.5 },
+              delay: 0.1,
+              ease: 'power1.inOut'
+            },
+            onUpdate: (self) => {
+              // Update active index based on progress (0 to 1)
+              const newActive = Math.round(self.progress * (totalItems - 1))
+              setActive(newActive)
+            }
+          },
+        })
+
+        triggerRef.current = tween.scrollTrigger as ScrollTrigger
+        ScrollTrigger.refresh()
+      }, 100)
+
+      return () => {
+        clearTimeout(timer)
+        if (triggerRef.current) {
+          triggerRef.current.kill()
+          triggerRef.current = null
         }
-      },
+      }
     })
 
-    triggerRef.current = tween.scrollTrigger as ScrollTrigger
-    ScrollTrigger.refresh()
-
     return () => {
-      if (triggerRef.current) {
-        triggerRef.current.kill()
-        triggerRef.current = null
-      }
+      mm.revert()
     }
   }, [])
 
@@ -77,8 +89,8 @@ export default function Services() {
   }, [lenis])
 
   return (
-    <section id="services" ref={sectionRef} className="relative z-10 border-t border-[var(--border)] overflow-hidden h-screen theme-dark-bg">
-      <div className="lg:grid lg:grid-cols-[minmax(240px,300px)_1fr] max-w-[1400px] mx-auto h-full">
+    <section id="services" ref={sectionRef} className="relative z-10 border-t border-[var(--border)] overflow-hidden h-auto lg:h-screen theme-dark-bg">
+      <div className="flex flex-col lg:grid lg:grid-cols-[minmax(240px,300px)_1fr] max-w-[1400px] mx-auto h-full">
 
         {/* Sidebar — sticky, only on desktop */}
         <aside className="hidden lg:flex flex-col h-full border-r border-[var(--border)] bg-[var(--bg-start)]/80 backdrop-blur-md z-20">
@@ -130,15 +142,15 @@ export default function Services() {
         </aside>
 
         {/* Mobile header */}
-        <div className="lg:hidden px-6 pt-16 pb-4 shrink-0 absolute top-0 left-0 w-full z-20 bg-[var(--bg-start)]/90 backdrop-blur-md border-b border-[var(--border)]">
+        <div className="lg:hidden px-6 pt-16 pb-4 w-full z-20 bg-[var(--bg-start)]/90 backdrop-blur-md border-b border-[var(--border)]">
           <p className="font-body text-[var(--primary)] text-sm font-semibold tracking-widest uppercase mb-3">
             What we build
           </p>
           <h2 className="font-display font-bold text-5xl text-[var(--text)]">Services</h2>
         </div>
 
-        {/* Right column: Fixed carousel viewport */}
-        <div className="relative h-full flex flex-col items-center justify-center px-6 lg:px-10 py-24 lg:py-20 z-10 w-full">
+        {/* Desktop: Fixed carousel viewport */}
+        <div className="hidden lg:flex relative h-full flex-col items-center justify-center px-6 lg:px-10 py-24 lg:py-20 z-10 w-full">
           <div
             className="relative w-full overflow-hidden rounded-3xl border border-[var(--border)] shadow-[0_32px_80px_rgba(0,0,0,0.4)]"
             style={{ height: 'min(72vh, 620px)', maxHeight: 'calc(100vh - 200px)' }}
@@ -218,6 +230,52 @@ export default function Services() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Mobile: Horizontal scroll-snap carousel */}
+        <div 
+          className="flex lg:hidden w-full overflow-x-auto snap-x snap-mandatory gap-4 pt-4 pb-4 px-6 relative z-10"
+          style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' } as React.CSSProperties}
+        >
+          {serviceCarouselItems.map((item) => (
+            <div
+              key={item.id}
+              className="snap-center shrink-0 w-[85vw] max-w-[340px] aspect-[4/5] bg-[var(--card)] rounded-3xl overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.3)] border border-[var(--border)] relative flex flex-col"
+            >
+              <Image
+                src={item.image}
+                alt={item.label}
+                fill
+                className="object-cover"
+                draggable={false}
+                loading="lazy"
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: `linear-gradient(to top, rgba(4,12,24,0.95) 0%, rgba(4,12,24,0.4) 50%, ${item.accent}22 100%)`,
+                }}
+              />
+              <div className="absolute inset-0 flex flex-col justify-end p-6 pointer-events-auto">
+                <p className="font-body text-[10px] text-[var(--primary)] uppercase tracking-widest mb-2">
+                  {item.subtitle}
+                </p>
+                <h3 className="font-display font-bold text-3xl text-[var(--text)] mb-3">
+                  {item.label}
+                </h3>
+                <p className="font-body text-[var(--text-secondary)] text-sm leading-relaxed mb-4">
+                  {item.description}
+                </p>
+                <div className="flex flex-wrap gap-2 mt-auto">
+                  {item.categories.slice(0, 3).map((cat) => (
+                    <span key={cat} className="px-3 py-1 rounded-full border border-[var(--border)] bg-[var(--bg-mid)]/60 font-body text-[10px] text-[var(--text-secondary)]">
+                      {cat}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

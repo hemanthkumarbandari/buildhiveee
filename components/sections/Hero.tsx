@@ -8,12 +8,8 @@ import MagneticButton from '@/components/ui/MagneticButton'
 import SnowmanHero from '@/components/ui/SnowmanHero'
 import { gsap } from '@/lib/gsap'
 import { useReducedMotion } from '@/hooks/useReducedMotion'
+import { useIsMobile } from '@/hooks/useIsMobile'
 import dynamic from 'next/dynamic'
-import { useState } from 'react'
-
-const Aurora = dynamic(() => import('@/components/effects/Aurora'), {
-  ssr: false,
-})
 
 const containerVariants = {
   hidden: {},
@@ -29,14 +25,7 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
   const headlineRef = useRef<HTMLDivElement>(null)
   const reduced = useReducedMotion()
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     if (reduced) return
@@ -65,18 +54,6 @@ export default function Hero() {
     >
       <SnowEffect />
       <div className="absolute top-[-20%] left-[-15%] w-[150%] max-w-[800px] aspect-square rounded-full bg-[var(--primary)]/15 blur-[160px] pointer-events-none -z-10" aria-hidden="true" />
-      
-      {/* Aurora Ambient Background */}
-      {!reduced && !isMobile && (
-        <div className="absolute inset-0 z-0 pointer-events-none" style={{ opacity: 0.4 }}>
-          <Aurora
-            colorStops={["#0F2847", "#63b8ff", "#7364ff"]}
-            amplitude={0.6}
-            blend={0.4}
-            speed={0.3}
-          />
-        </div>
-      )}
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 w-full">
         <div className="grid grid-cols-1 md:grid-cols-[55fr_45fr] gap-12 md:gap-8 items-center">
@@ -145,7 +122,8 @@ export default function Hero() {
             className="relative h-[420px] md:h-[520px] hidden md:flex items-center justify-center"
           >
             <div className="relative flex items-center justify-center w-full h-full min-h-[500px]">
-              <SnowmanHero />
+              {/* Only render heavy 3D scene on desktop/tablet to save battery and performance */}
+              {!isMobile && <SnowmanHero />}
             </div>
           </motion.div>
         </div>
